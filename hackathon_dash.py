@@ -11,11 +11,10 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_table
-import dcc as dcc
-import numpy as np
-import pandas as pd
-import plotly.graph_objects as go
+# import dash_table
+# import numpy as np
+# import pandas as pd
+# import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 
 ################################################################
@@ -42,26 +41,28 @@ app.layout = dbc.Container(
         dcc.Store(id="store"),
         html.Br(),
         html.Br(),
-        html.H1("f(1)"),
+        html.H1("Pandemic Mental Health Risk Assessment"),
         dbc.Tabs(
             [
                 dbc.Tab(label="Home", tab_id="home", children=[
                     html.Br(),
                     html.P(
-                        "In the midst of a pandemic, mental health is a serious issue that cannot be ignored."
-                        "Quarantine orders, financial strain, pandemic-related stress, and other aspects can"
+                        "In the midst of a pandemic, mental health is a serious issue that cannot be ignored. "
+                        "Quarantine orders, financial strain, pandemic-related stress, and other aspects can "
                         "contribute to depression, anxiety, and other mental health risks. To complete your "
-                        "mental health assessment and get resources for your mental health during the pandemic,"
+                        "mental health assessment and get resources for your mental health during the pandemic, "
                         "please answer the following questions."),
                     dbc.Input(type="text", id="example-name", placeholder="Name"),
+                    html.Br(),
                     dbc.Input(type="text", id="example-zip", placeholder="Zip Code"),
                     # dcc.Dropdown(className='div-for-dropdown', id='standings_year', value=2020, clearable=False,
                     #              options=[{'label': i, 'value': i} for i in races_df['year'].unique()]),
+                    html.Div(id='outcome'),
                 ]),
                 dbc.Tab(label="Resources", tab_id="resources", children=[
                     html.Br(),
                     html.P(
-                        "Please remember to drink plenty of water, eat 3 meals a day, get 8 hours of sleep, and"
+                        "Please remember to drink plenty of water, eat 3 meals a day, get 8 hours of sleep, and "
                         "get physical exercise in the midst of the pandemic. You are also encouraged to reach out to "
                         "friends and family virtually and engage in meaningful hobbies in a safe manner."),
                     html.Br(),
@@ -88,8 +89,7 @@ app.layout = dbc.Container(
     [Input(component_id='example-name', component_property='value'),
      Input(component_id='example-zip', component_property='value')]
 )
-
-def get_ouput(input_value):
+def get_output(input_value):
     output = 3
     return 'Your predicted mental health risk score is: {}'.format(output)
 
