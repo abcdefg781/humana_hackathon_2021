@@ -67,11 +67,12 @@ div > img {
 .div-user-controls {
   padding-left: 55px;
   padding-top: 64px;
+  color: black
 }
 .div-for-dropdown {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  color: #31302F;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: black;
 }
 .div-for-slider {
   width: 97%;
@@ -84,13 +85,14 @@ div > img {
 }
 .Select-control, .Select-menu-outer, .Select-multi-value-wrapper, .select-up, .is-open .Select-control {
   background-color: white;
-  color: #FFFFFF;
+  color: black;
 }
 
 #bar-selector .Select-multi-value-wrapper{
   max-height: 82px;
   overflow-y: auto;
-  margin: 0px 0px -3px 0px;
+  margin: 0px 0px 0px 0px;
+  color: black;
 }
 
 .Select-control{
