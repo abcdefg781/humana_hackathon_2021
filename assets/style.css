@@ -77,6 +77,24 @@ div > img {
 .div-for-slider {
   width: 97%;
   text-align: center;
+  background-color: #d1d1d1;
+}
+.rc-slider-track {
+    background-color: #79C23F;
+}
+.rc-slider-dot-active {
+  border-color: #d1d1d1;
+  border: solid 2px #d1d1d1;
+}
+.rc-slider-handle {
+  background-color: #6730a1;
+  border-color: #6730a1;
+}
+.rc.slider-handle:hover {
+  border-color: #6730a1;
+}
+.rc.slider-handle-active:active {
+  border-color: #6730a1;
 }
 .logo {
   height: 35px;
@@ -96,7 +114,7 @@ div > img {
 }
 
 .Select-control{
-  border: 0.5px solid #dbdbdb44;
+  border: 0.5px solid #d1d1d1;
 }
 
 .has-value.Select--single>.Select-control .Select-value .Select-value-label, .has-value.is-pseudo-focused.Select--single>.Select-control .Select-value .Select-value-label {

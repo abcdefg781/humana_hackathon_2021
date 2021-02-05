@@ -19,7 +19,6 @@ import pandas as pd
 # import plotly.graph_objects as go
 from dash.dependencies import Input, Output, State
 
-
 ################################################################
 # Dash App Setup and Style Sheets
 BS = "https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/lux/bootstrap.min.css"
@@ -55,21 +54,21 @@ app.layout = dbc.Container(
                     '''),
                     html.Br(),
                     dbc.Row([
-                            dbc.Col(
-                                html.Div(
-                                    html.Img(src=app.get_asset_url("healthymind.png"))
-                                )
-                            ),
-                            dbc.Col(
-                                html.Div(
-                                    html.Img(src=app.get_asset_url("humanalogo.png"))
-                                )
-                            ),
-                            dbc.Col(
-                                html.Div(
-                                    html.Img(src=app.get_asset_url("pandemic.png"))
-                                )
-                            ),
+                        dbc.Col(
+                            html.Div(
+                                html.Img(src=app.get_asset_url("healthymind.PNG"))
+                            )
+                        ),
+                        dbc.Col(
+                            html.Div(
+                                html.Img(src=app.get_asset_url("humanalogo.png"))
+                            )
+                        ),
+                        dbc.Col(
+                            html.Div(
+                                html.Img(src=app.get_asset_url("pandemic.PNG"))
+                            )
+                        ),
                     ]),
                     dcc.Markdown('''
                     In the midst of a pandemic, mental health is a serious issue that cannot be ignored. Quarantine 
@@ -87,61 +86,125 @@ app.layout = dbc.Container(
                     html.P("What is your name?"),
                     dbc.Input(type="text", id="example-name", placeholder="Name"),
                     html.Br(),
-                    # Q1: State
+                    # Q0.1: State
                     html.P("In what state do you currently reside?"),
-                    dcc.Dropdown(className='div-for-dropdown', id="q1", clearable=True,
+                    dcc.Dropdown(className='div-for-dropdown', id="example-state", clearable=True,
                                  options=[{'label': i, 'value': i} for i in states_df['State']]),
                     html.Br(),
-                    # Q2: County
+                    # Q0.2: County
                     html.P("In what county do you currently reside?"),
-                    dbc.Input(type="text", id="q2", placeholder="County Name"),
+                    dbc.Input(type="text", id="example-county", placeholder="County Name"),
                     html.Br(),
-                    # Q3: Age
+                    # Q1: Gender
+                    html.P("What is your current self-identified gender?"),
+                    dcc.Dropdown(className='div-for-dropdown', id="q1", clearable=True,
+                                 options=[
+                                     {'label': 'Male', 'value': 0},
+                                     {'label': 'Female', 'value': 1},
+                                     {'label': 'Transgender Female', 'value': 2},
+                                     {'label': 'Transgender Male', 'value': 3},
+                                     {'label': 'Non-Binary', 'value': 4}
+                                 ]),
+                    html.Br(),
+                    # Q2: Age
                     html.P("What is your age?"),
-                    dbc.Input(type="number", id="q3", placeholder="Age"),
+                    dbc.Input(type="number", id="q2", placeholder="Age"),
                     html.Br(),
-                    # Q4: Gender
-                    html.P("What is your gender?"),
-                    dcc.Dropdown(className='div-for-dropdown', id="q4", clearable=True,
-                                 options=[
-                                      {'label': 'Male', 'value': 0},
-                                      {'label': 'Female', 'value': 1},
-                                      {'label': 'Transgender Female', 'value': 2},
-                                      {'label': 'Transgender Male', 'value': 3},
-                                      {'label': 'Non-Binary', 'value': 4}
-                                  ]),
+                    # Q3: Children
+                    html.P("Do you have children aged 18 or below and/or living with you?"),
+                    dbc.Input(type="number", id="q3", placeholder="Number of Children"),
                     html.Br(),
-                    # Q5: Children
-                    html.P("How many children do you have?"),
-                    dbc.Input(type="number", id="q5", placeholder="Number of Children"),
-                    html.Br(),
-                    # Q6: Smoking
-                    html.P("Do you currently smoke?"),
-                    dcc.Dropdown(className='div-for-dropdown', id="q6", clearable=False,
-                                 options=[
-                                     {'label': 'Yes', 'value': 1},
-                                     {'label': 'No', 'value': 0}
-                                 ]),
-                    html.Br(),
-                    # Q7: Work Hours
+                    # Q4: Work Hours
                     html.P("In the past week, how many hours were you working for pay?"),
-                    dbc.Input(type="number", id="q7", placeholder="Number of Working Hours"),
+                    dbc.Input(type="number", id="q4", placeholder="Number of Working Hours"),
                     html.Br(),
-                    # Q8: Happy Days
-                    html.P("On a scale of 0-10, how happy would you say you are, generally?"),
-                    dbc.Input(type="number", id="q8", placeholder="Please enter a number from 0-10"),
-                    html.Br(),
-                    # Q9: Mentally Unhealthy Days
+                    # Q5: Mentally Unhealthy Days
                     html.P("In the past 30 days, how many days have you felt mentally unhealthy?"),
-                    dbc.Input(type="number", id="q9", placeholder="Please enter a number less than 30"),
+                    dbc.Input(type="number", id="q5", placeholder="Please enter a number less than 30"),
                     html.Br(),
-                    # Q10: Anxiety Increase
-                    html.P("In the past 30 days, have you felt more anxious than previously?"),
-                    dcc.Dropdown(className='div-for-dropdown', id="q10", clearable=False,
-                                 options=[
-                                     {'label': 'Yes', 'value': 1},
-                                     {'label': 'No', 'value':0}
-                                 ]),
+                    html.P("The following questions use a scale from 1-10. Please provide your answer using the scale"
+                           " with 1 indicating the lowest and 10 indicating the highest."),
+                    # Q6: Anxiety Increase
+                    html.P("In the past 30 days, on a scale from 1-10, what would you say is the level of your anxiety"
+                           " and stress?"),
+                    dcc.Slider(id='q6', min=1, max=10, value=5,
+                               marks={
+                                   1: {'label': '1'},
+                                   2: {'label': '2'},
+                                   3: {'label': '3'},
+                                   4: {'label': '4'},
+                                   5: {'label': '5'},
+                                   6: {'label': '6'},
+                                   7: {'label': '7'},
+                                   8: {'label': '8'},
+                                   9: {'label': '9'},
+                                   10: {'label': '10'}
+                               }),
+                    html.Br(),
+                    # Q7: Home Stress
+                    html.P("On a scale from 1-10, how stressed are you about your home (including financial status, "
+                           "relationships, and other home-related factors.)"),
+                    dcc.Slider(id='q7', min=1, max=10, value=5,
+                               marks={
+                                   1: {'label': '1'},
+                                   2: {'label': '2'},
+                                   3: {'label': '3'},
+                                   4: {'label': '4'},
+                                   5: {'label': '5'},
+                                   6: {'label': '6'},
+                                   7: {'label': '7'},
+                                   8: {'label': '8'},
+                                   9: {'label': '9'},
+                                   10: {'label': '10'}
+                               }),
+                    html.Br(),
+                    # Q8: Future Stress
+                    html.P("On a scale from 1-10, how stressed are you about your future, generally?"),
+                    dcc.Slider(id='q8', min=1, max=10, value=5,
+                               marks={
+                                   1: {'label': '1'},
+                                   2: {'label': '2'},
+                                   3: {'label': '3'},
+                                   4: {'label': '4'},
+                                   5: {'label': '5'},
+                                   6: {'label': '6'},
+                                   7: {'label': '7'},
+                                   8: {'label': '8'},
+                                   9: {'label': '9'},
+                                   10: {'label': '10'}
+                               }),
+                    html.Br(),
+                    # Q9: Satisfaction
+                    html.P("On a scale from 1-10, how satisfied are you with life, generally?"),
+                    dcc.Slider(id='q9', min=1, max=10, value=5,
+                               marks={
+                                   1: {'label': '1'},
+                                   2: {'label': '2'},
+                                   3: {'label': '3'},
+                                   4: {'label': '4'},
+                                   5: {'label': '5'},
+                                   6: {'label': '6'},
+                                   7: {'label': '7'},
+                                   8: {'label': '8'},
+                                   9: {'label': '9'},
+                                   10: {'label': '10'}
+                               }),
+                    html.Br(),
+                    # Q10: Happiness
+                    html.P("On a scale from 1-10, how happy are you with life, generally?"),
+                    dcc.Slider(id='q10', min=1, max=10, value=5,
+                               marks={
+                                   1: {'label': '1'},
+                                   2: {'label': '2'},
+                                   3: {'label': '3'},
+                                   4: {'label': '4'},
+                                   5: {'label': '5'},
+                                   6: {'label': '6'},
+                                   7: {'label': '7'},
+                                   8: {'label': '8'},
+                                   9: {'label': '9'},
+                                   10: {'label': '10'}
+                               }),
                     html.Br(),
                     html.Button(id='submit-button', n_clicks=0, children='Submit'),
                     html.Br(),
@@ -195,12 +258,12 @@ app.layout = dbc.Container(
                 dbc.Tab(label="Why Minds Matter", tab_id="deck", children=[
                     html.Br(),
                     dcc.Markdown('''## Problems We Face'''),
-                    html.Img(src=app.get_asset_url("deck1.png")),
+                    html.Img(src=app.get_asset_url("deck1.PNG")),
                     dcc.Markdown('''
                     Text here. Behavioral Health is the cornerstone of any public health efforts.
                     '''),
                     dcc.Markdown('''## Solution We Propose'''),
-                    html.Img(src=app.get_asset_url("deck2.png")),
+                    html.Img(src=app.get_asset_url("deck2.PNG")),
                 ]),
                 dbc.Tab(label="Our Team", tab_id="team", children=[
                     html.Br(),
@@ -217,9 +280,16 @@ app.layout = dbc.Container(
                             html.P("Nibhrat Lohia")
                         ),
                         dbc.Col(
-                            html.P("Minh Luu")
+                            html.Div(children=[
+                                dcc.Markdown('''
+                                    **Minh Luu**                              
+                                    Behavioral Health/Data Scientist
+                                    '''),
+                                html.Img(src=app.get_asset_url("minh.jpg"))
+                            ])
                         ),
                     ]),
+                    html.Br(),
                     dbc.Row([
                         dbc.Col(
                             html.P("Sreedevi Madhusoodhanan Lalithambika")
@@ -266,10 +336,10 @@ app.layout = dbc.Container(
 def get_output(n_clicks, name_input, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10):
     click_value = n_clicks
     if click_value is None:
-            raise dash.exceptions.PreventUpdate
+        raise dash.exceptions.PreventUpdate
     elif click_value >= 1:
-        output = random.randint(0,10)
-        if output <=1:
+        output = random.randint(0, 10)
+        if output <= 1:
             output_category = "low"
             category_suggestions = "" \
                                    "Because your mental health risk score is low, it is suggested that you to " \
@@ -292,6 +362,7 @@ def get_output(n_clicks, name_input, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10):
             resources tab for more information on ways to improve your mental health and get help during the pandemic.
             {}
         '''.format(name_input, output, output_category, category_suggestions)
+
 
 ################################################################
 # Load to Dash
