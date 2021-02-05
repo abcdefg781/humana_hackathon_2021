@@ -19,6 +19,8 @@ import pandas as pd
 # import plotly.graph_objects as go
 from dash.dependencies import Input, Output, State
 
+# local modules
+from Model import *
 ################################################################
 # Dash App Setup and Style Sheets
 BS = "https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/lux/bootstrap.min.css"
@@ -56,7 +58,7 @@ app.layout = dbc.Container(
                     dbc.Row([
                         dbc.Col(
                             html.Div(
-                                html.Img(src=app.get_asset_url("healthymind.PNG"))
+                                html.Img(src=app.get_asset_url("man_photo.PNG"), style={'height': '105%', 'width': '105%'})
                             )
                         ),
                         dbc.Col(
@@ -66,7 +68,7 @@ app.layout = dbc.Container(
                         ),
                         dbc.Col(
                             html.Div(
-                                html.Img(src=app.get_asset_url("pandemic.PNG"))
+                                html.Img(src=app.get_asset_url("woman.PNG"))
                             )
                         ),
                     ]),
@@ -101,9 +103,7 @@ app.layout = dbc.Container(
                                  options=[
                                      {'label': 'Male', 'value': 0},
                                      {'label': 'Female', 'value': 1},
-                                     {'label': 'Transgender Female', 'value': 2},
-                                     {'label': 'Transgender Male', 'value': 3},
-                                     {'label': 'Non-Binary', 'value': 4}
+                                     {'label': 'Other', 'value': 1}
                                  ]),
                     html.Br(),
                     # Q2: Age
@@ -206,11 +206,27 @@ app.layout = dbc.Container(
                                    10: {'label': '10'}
                                }),
                     html.Br(),
+                    # Optional Ask
+                    html.P("Is there anything else you would like to share? Anything else we should know about your"
+                           " mental health state, or any feedback you would like to provide?"),
+                    dcc.Textarea(id='text-area-example', value='', style={'width': '100%', 'height': 100}),
+                    html.Br(),
+                    html.Br(),
                     html.Button(id='submit-button', n_clicks=0, children='Submit'),
                     html.Br(),
                     html.Br(),
                     html.Div(id='outcome'),
                     html.Br()
+                ]),
+                # Tab 2: Personalized Recommendations
+                dbc.Tab(label="Personalized Recommendations", tab_id="recommendations", children=[
+                    html.Br(),
+                    dcc.Markdown('''
+                    ## Personalized Recommendations Tailored to Your Needs
+                    Below are some personalized recommendations based on your mental health risk score. These are 
+                    suggestions based on the top factors influencing your risk score. Please remember that your score
+                    is fluid and does not define who you are.
+                    ''')
                 ]),
                 # Tab 2: Resources
                 dbc.Tab(label="Resources", tab_id="resources", children=[
@@ -258,12 +274,27 @@ app.layout = dbc.Container(
                 dbc.Tab(label="Why Minds Matter", tab_id="deck", children=[
                     html.Br(),
                     dcc.Markdown('''## Problems We Face'''),
-                    html.Img(src=app.get_asset_url("deck1.PNG")),
+                    html.Br(),
+                    html.Img(src=app.get_asset_url("deck1_photo.PNG"), style={'height':'80%', 'width':'80%'}),
                     dcc.Markdown('''
-                    Text here. Behavioral Health is the cornerstone of any public health efforts.
+                    During the pandemic in 2020, it is estimated that mental distress has increased by three times. Even
+                    worse, this year, more than 35 million more people will need mental health services. Pandemics are
+                    known to increase the amount of isolation, job insecurity, fear of losing loved ones, anxiety,
+                    depression, and much more. To combat this, we need a tool that is based on behavioral health and
+                    can bring awareness to mental health and hopefully improve it.
                     '''),
                     dcc.Markdown('''## Solution We Propose'''),
-                    html.Img(src=app.get_asset_url("deck2.PNG")),
+                    html.Img(src=app.get_asset_url("deck2_photo.PNG"), style={'height':'80%', 'width':'80%'}),
+                    dcc.Markdown('''
+                    Minds Matter is driven by immeasurable impacts of behavioral health interventions and great desire
+                    to help those who have suffered mental health distress during the pandemic. Our solution is an
+                    interactive tool built out of a database containing both individual behavioral and geospatial data.
+                    
+                    Minds Matter prioritizes evaluating mental health risks early on to make users aware of their 
+                    risk early on in a personalized, private, and time-efficient space.
+                    '''),
+                    html.Br(),
+                    html.Br(),
                 ]),
                 dbc.Tab(label="Our Team", tab_id="team", children=[
                     html.Br(),
@@ -307,6 +338,8 @@ app.layout = dbc.Container(
                             ])
                         ),
                     ]),
+                    html.Br(),
+                    html.Br(),
                 ])
             ],
             id="tabs",
@@ -338,7 +371,17 @@ def get_output(n_clicks, name_input, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10):
     if click_value is None:
         raise dash.exceptions.PreventUpdate
     elif click_value >= 1:
-        output = random.randint(0, 10)
+        output = get_model_output(name_input=name_input,
+                                  gender=q1,
+                                  age=q2,
+                                  children=q3,
+                                  work_hrs=q4,
+                                  Unhealth_Days=q5,
+                                  anxiety_increase=q6,
+                                  stress_home=q7,
+                                  stress_future=q8,
+                                  satisfied=q9,
+                                  happy=q10)
         if output <= 1:
             output_category = "low"
             category_suggestions = "" \
