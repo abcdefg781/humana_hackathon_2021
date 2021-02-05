@@ -106,14 +106,17 @@ def generate_explanations(input_arr: np.array):
 def save_data(csv_row, output_path=output_path):
     exists_path = path.exists(output_path)
     if exists_path:
-        df = pd.read_csv(output_path)
-        df.loc[len(df)-1, :] = csv_row
+        with open(output_path, 'a+', newline='') as write_obj:
+            # Create a writer object from csv module
+            csv_writer = writer(write_obj)
+            # Add contents of list as last row in the csv file
+            csv_writer.writerow(csv_row)
     else:
         df = pd.DataFrame(columns=['happy', 'Avg. # of Ment.Unhealth. Days', 'anxiety_increase',
        'work_hrs', 'age', 'stress_future', 'stress_home', 'satisfied',
        'gender', 'children', 'top_factor_1', 'top_factor_2', 'top_factor_3', 'top_factor_val_1', 'top_factor_val_2', 'top_factor_val_3', 'prediction_output'])
         df.loc[0, :] = csv_row
-        df.to_csv(output_path)
+        df.to_csv(output_path, index=False)
 
 
 
